@@ -1,0 +1,38 @@
+services:
+  valheim:
+    image: lloesche/valheim-server:latest
+    container_name: valheim-server
+    cap_add:
+      - SYS_NICE
+    stop_grace_period: 120s
+    restart: unless-stopped
+    ports:
+      - "2456:2456/udp"
+      - "2457:2457/udp"
+      - "2458:2458/udp"
+
+    volumes:
+      - ${HOME}/valheim-server/config:/config
+      - ${HOME}/valheim-server/data:/opt/valheim
+      - ${HOME}/valheim-server/worlds:/home/valheim/.config/unity3d/IronGate/Valheim
+
+    environment:
+      # ===== Configuração básica =====
+      SERVER_NAME: "Budega"
+      WORLD_NAME: "Erebus"
+      SERVER_PASS: "Budega"
+      SERVER_PUBLIC: "false"
+      TZ: "America/Sao_Paulo"
+      LANGUAGE: "BrazilianPortuguese"
+      UPDATE_IF_IDLE: "true"
+      # ===== World Modifiers (automático) =====
+      # Equivalente aos sliders da imagem
+      SERVER_ARGS: -modifier combat veryhard -modifier deathpenalty normal -modifier resources verylow -modifier raids veryoften -modifier portals normal
+
+      # ===== Qualidade de vida =====
+      AUTO_UPDATE: "1"
+      AUTO_UPDATE_SCHEDULE: "0 6 * * *"
+
+      BACKUPS: "true"
+      BACKUPS_MAX_AGE: "7"
+
